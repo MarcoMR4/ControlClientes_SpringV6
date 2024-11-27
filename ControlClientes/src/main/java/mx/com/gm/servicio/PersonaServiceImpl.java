@@ -4,6 +4,8 @@ import java.util.List;
 import mx.com.gm.dao.PersonaDAO;
 import mx.com.gm.domain.Persona;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,8 +15,8 @@ public class PersonaServiceImpl implements PersonaService{
     @Autowired
     private PersonaDAO personaDao;
 
-    @Override
     @Transactional(readOnly = true)
+    @Override
     public List<Persona> listarPersonas() {
         return (List<Persona>) personaDao.findAll();
     }
@@ -37,4 +39,11 @@ public class PersonaServiceImpl implements PersonaService{
         return personaDao.findById(persona.getIdPersona()).orElse(null);
     }
     
+    @Transactional(readOnly = true)
+    @Override
+    public Page<Persona> listarPersonasP(Pageable pageable) {
+        return personaDao.findAll(pageable); // Devuelve el Page con la paginación
+    }
+    
+
 }

@@ -28,7 +28,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr th:each="persona, contador : ${personas} ">
+                                            <tr th:each="persona, contador : ${personasPage} ">
                                                 <td>[[${contador.count}]]</td>
                                                 <td>[[${persona.nombre} + ' ' + ${persona.apellido}]]</td>
                                                 <td>[[${persona.email}]]</td>
@@ -53,6 +53,27 @@
 
                                 </div>
 
+                                <!-- Paginación --> 
+                                <nav aria-label="Personas Page">
+                                    <ul class="pagination">
+                                        <!-- Botón de 'Anterior' -->
+                                        <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled' : ''">
+                                            <a class="page-link" th:href="@{/page/{page}(page=${currentPage - 1})}" th:attr="aria-label='Anterior'">[[#{paginacion.anterior}]]</a>
+                                        </li>
+
+                                        <!-- Páginas -->
+                                        <li class="page-item" th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}"
+                                            th:classappend="${pageNum == currentPage} ? 'active' : ''">
+                                            <a class="page-link" th:href="@{/page/{page}(page=${pageNum})}" th:text="${pageNum + 1}">1</a>
+                                        </li>
+
+                                        <!-- Botón de 'Siguiente' -->
+                                        <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled' : ''">
+                                            <a class="page-link" th:href="@{/page/{page}(page=${currentPage + 1})}" th:attr="aria-label='Siguiente'">[[#{paginacion.siguiente}]]</a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                                
                             </div>
                             <div class="text-center p-2" th:if="${personas == null or personas.empty}">
                                 <span th:text="#{persona.lista-vacia}">Lista vacía</span>
